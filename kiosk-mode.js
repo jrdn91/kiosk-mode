@@ -60,6 +60,7 @@ class KioskMode {
     this.hideMenuButton = queryStringsSet ? this.hideMenuButton : config.kiosk || config.hide_menubutton;
     this.hidePanelButtons = queryStringsSet ? this.hidePanelButtons : config.hide_panel_buttons;
 
+    console.log("this.user.is_admin", this.user.is_admin)
     const adminConfig = this.user.is_admin ? config.admin_settings : config.non_admin_settings;
     if (adminConfig) this.setOptions(adminConfig);
 
