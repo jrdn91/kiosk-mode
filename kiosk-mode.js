@@ -36,6 +36,8 @@ class KioskMode {
   }
 
   processConfig(lovelace, config) {
+    console.log("lovelace", lovelace)
+    console.log("config", config)
     const dash = this.ha.hass.panelUrl;
     if (!window.kioskModeEntities[dash]) window.kioskModeEntities[dash] = [];
     this.hideHeader = this.hideSidebar = this.hideOverflow = this.ignoreEntity = this.ignoreMobile = false;
