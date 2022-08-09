@@ -36,8 +36,6 @@ class KioskMode {
   }
 
   processConfig(lovelace, config) {
-    console.log("lovelace", lovelace)
-    console.log("config", config)
     const dash = this.ha.hass.panelUrl;
     if (!window.kioskModeEntities[dash]) window.kioskModeEntities[dash] = [];
     this.hideHeader = this.hideSidebar = this.hideOverflow = this.ignoreEntity = this.ignoreMobile = false;
@@ -60,7 +58,6 @@ class KioskMode {
     this.hideMenuButton = queryStringsSet ? this.hideMenuButton : config.kiosk || config.hide_menubutton;
     this.hidePanelButtons = queryStringsSet ? this.hidePanelButtons : config.hide_panel_buttons;
 
-    console.log("this.user.is_admin", this.user.is_admin)
     const adminConfig = this.user.is_admin ? config.admin_settings : config.non_admin_settings;
     if (adminConfig) this.setOptions(adminConfig);
 
@@ -103,7 +100,6 @@ class KioskMode {
     const headerStyle = "#view{min-height:100vh !important;--header-height:0;}app-header{display:none;}";
 
     console.log("hidePanelButtons", this.hidePanelButtons)
-    console.log("hideHeader", this.hideHeader)
 
     if (this.hideHeader || this.hideOverflow) {
       this.addStyle(`${this.hideHeader ? headerStyle : ""}${this.hideOverflow ? overflowStyle : ""}`, huiRoot);
@@ -121,6 +117,15 @@ class KioskMode {
       if (this.queryString("cache")) this.setCache("kmSidebar", "true");
     } else {
       this.removeStyle([appToolbar, drawerLayout]);
+      if (this.hidePanelButtons) {
+        this.hidePanelButtons.forEach(function(panel) {
+          try {
+            document.querySelector("body > home-assistant").shadowRoot.querySelector("home-assistant-main").shadowRoot.querySelector("#drawer > ha-sidebar").shadowRoot.querySelector(`paper-listbox > a[data-panel="${panel}"]`).style.display = "none"
+          } catch (e) {
+            console.error(e)
+          }
+        })
+      }
     }
 
     if (this.hideMenuButton) {
@@ -164,7 +169,6 @@ class KioskMode {
   }
 
   setOptions(config) {
-    console.log("setting options with config", config)
     this.hideHeader = config.kiosk || config.hide_header;
     this.hideSidebar = config.kiosk || config.hide_sidebar;
     this.hideOverflow = config.kiosk || config.hide_overflow;
