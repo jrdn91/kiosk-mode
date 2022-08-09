@@ -58,7 +58,7 @@ class KioskMode {
     this.hideSidebar = queryStringsSet ? this.hideSidebar : config.kiosk || config.hide_sidebar;
     this.hideOverflow = queryStringsSet ? this.hideOverflow : config.kiosk || config.hide_overflow;
     this.hideMenuButton = queryStringsSet ? this.hideMenuButton : config.kiosk || config.hide_menubutton;
-    this.hidePanelButtons = queryStringsSet ? this.hidePanelButtons : config.kiosk || config.hide_panel_buttons;
+    this.hidePanelButtons = queryStringsSet ? this.hidePanelButtons : config.hide_panel_buttons;
 
     const adminConfig = this.user.is_admin ? config.admin_settings : config.non_admin_settings;
     if (adminConfig) this.setOptions(adminConfig);
