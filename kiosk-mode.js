@@ -100,6 +100,7 @@ class KioskMode {
     const headerStyle = "#view{min-height:100vh !important;--header-height:0;}app-header{display:none;}";
 
     console.log("hidePanelButtons", this.hidePanelButtons)
+    console.log("hideHeader", this.hideHeader)
 
     if (this.hideHeader || this.hideOverflow) {
       this.addStyle(`${this.hideHeader ? headerStyle : ""}${this.hideOverflow ? overflowStyle : ""}`, huiRoot);
