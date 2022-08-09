@@ -1,7 +1,7 @@
 class KioskMode {
   constructor() {
     window.kioskModeEntities = {};
-    if (this.queryString("clear_km_cache")) this.setCache(["kmHeader", "kmSidebar", "kmOverflow", "kmMenuButton"], "false");
+    if (this.queryString("clear_km_cache")) this.setCache(["kmHeader", "kmSidebar", "kmOverflow", "kmMenuButton", "kmPanelButtons"], "false");
     this.ha = document.querySelector("home-assistant");
     this.main = this.ha.shadowRoot.querySelector("home-assistant-main").shadowRoot;
     this.user = this.ha.hass.user;
@@ -42,12 +42,13 @@ class KioskMode {
 
     // Retrieve localStorage values & query string options.
     const queryStringsSet =
-      this.cached(["kmHeader", "kmSidebar", "kmOverflow", "kmMenuButton"]) || this.queryString(["kiosk", "hide_sidebar", "hide_header", "hide_overflow", "hide_menubutton"]);
+      this.cached(["kmHeader", "kmSidebar", "kmOverflow", "kmMenuButton", "kmHidePanelButtons"]) || this.queryString(["kiosk", "hide_sidebar", "hide_header", "hide_overflow", "hide_menubutton", "hide_panel_buttons"]);
     if (queryStringsSet) {
       this.hideHeader = this.cached("kmHeader") || this.queryString(["kiosk", "hide_header"]);
       this.hideSidebar = this.cached("kmSidebar") || this.queryString(["kiosk", "hide_sidebar"]);
       this.hideOverflow = this.cached("kmOverflow") || this.queryString(["kiosk", "hide_overflow"]);
       this.hideMenuButton = this.cached("kmMenuButton") || this.queryString(["kiosk", "hide_menubutton"]);
+      this.hidePanelButtons = this.cached("kmHidePanelButtons") || this.queryString(["kiosk", "hide_panel_buttons"]);
     }
 
     // Use config values only if config strings and cache aren't used.
@@ -55,6 +56,7 @@ class KioskMode {
     this.hideSidebar = queryStringsSet ? this.hideSidebar : config.kiosk || config.hide_sidebar;
     this.hideOverflow = queryStringsSet ? this.hideOverflow : config.kiosk || config.hide_overflow;
     this.hideMenuButton = queryStringsSet ? this.hideMenuButton : config.kiosk || config.hide_menubutton;
+    this.hidePanelButtons = queryStringsSet ? this.hidePanelButtons : config.kiosk || config.hide_panel_buttons;
 
     const adminConfig = this.user.is_admin ? config.admin_settings : config.non_admin_settings;
     if (adminConfig) this.setOptions(adminConfig);
@@ -81,6 +83,7 @@ class KioskMode {
           if ("hide_sidebar" in conf) this.hideSidebar = conf.hide_sidebar;
           if ("hide_overflow" in conf) this.hideOverflow = conf.hide_overflow;
           if ("hide_menubutton" in conf) this.hideMenuButton = conf.hide_menubutton;
+          if ("hide_panel_buttons" in conf) this.hidePanelButtons = conf.hide_panel_buttons;
           if ("kiosk" in conf) this.hideHeader = this.hideSidebar = conf.kiosk;
         }
       }
@@ -95,6 +98,8 @@ class KioskMode {
     const appToolbar = huiRoot.querySelector("app-toolbar");
     const overflowStyle = "ha-button-menu{display:none !important;}";
     const headerStyle = "#view{min-height:100vh !important;--header-height:0;}app-header{display:none;}";
+
+    console.log("hidePanelButtons", this.hidePanelButtons)
 
     if (this.hideHeader || this.hideOverflow) {
       this.addStyle(`${this.hideHeader ? headerStyle : ""}${this.hideOverflow ? overflowStyle : ""}`, huiRoot);
@@ -159,6 +164,7 @@ class KioskMode {
     this.hideSidebar = config.kiosk || config.hide_sidebar;
     this.hideOverflow = config.kiosk || config.hide_overflow;
     this.hideMenuButton = config.kiosk || config.hide_menubutton;
+    this.hidePanelButtons = config.hide_panel_buttons
     this.ignoreEntity = config.ignore_entity_settings;
     this.ignoreMobile = config.ignore_mobile_settings;
   }
