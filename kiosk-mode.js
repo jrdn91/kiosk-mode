@@ -163,6 +163,7 @@ class KioskMode {
   }
 
   setOptions(config) {
+    console.log("setting options with config", config)
     this.hideHeader = config.kiosk || config.hide_header;
     this.hideSidebar = config.kiosk || config.hide_sidebar;
     this.hideOverflow = config.kiosk || config.hide_overflow;
